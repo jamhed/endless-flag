@@ -51,7 +51,6 @@ CREATE TABLE name (
     id integer NOT NULL,
     node_id integer,
     name text,
-    parent_id integer,
     stamp timestamp without time zone
 );
 
@@ -84,8 +83,7 @@ ALTER SEQUENCE name_id_seq OWNED BY name.id;
 --
 
 CREATE TABLE node (
-    id integer NOT NULL,
-    parent_id integer
+    id integer NOT NULL
 );
 
 
@@ -113,6 +111,19 @@ ALTER SEQUENCE node_id_seq OWNED BY node.id;
 
 
 --
+-- Name: rel; Type: TABLE; Schema: public; Owner: jamhed; Tablespace: 
+--
+
+CREATE TABLE rel (
+    node_id integer,
+    parent_id integer,
+    stamp timestamp without time zone
+);
+
+
+ALTER TABLE rel OWNER TO jamhed;
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: jamhed
 --
 
@@ -138,7 +149,7 @@ COPY coord (node_id, stamp, attitude, longitude) FROM stdin;
 -- Data for Name: name; Type: TABLE DATA; Schema: public; Owner: jamhed
 --
 
-COPY name (id, node_id, name, parent_id, stamp) FROM stdin;
+COPY name (id, node_id, name, stamp) FROM stdin;
 \.
 
 
@@ -153,7 +164,7 @@ SELECT pg_catalog.setval('name_id_seq', 1, false);
 -- Data for Name: node; Type: TABLE DATA; Schema: public; Owner: jamhed
 --
 
-COPY node (id, parent_id) FROM stdin;
+COPY node (id) FROM stdin;
 \.
 
 
@@ -162,6 +173,14 @@ COPY node (id, parent_id) FROM stdin;
 --
 
 SELECT pg_catalog.setval('node_id_seq', 1, false);
+
+
+--
+-- Data for Name: rel; Type: TABLE DATA; Schema: public; Owner: jamhed
+--
+
+COPY rel (node_id, parent_id, stamp) FROM stdin;
+\.
 
 
 --
@@ -197,19 +216,19 @@ ALTER TABLE ONLY name
 
 
 --
--- Name: name_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: jamhed
+-- Name: rel_node_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: jamhed
 --
 
-ALTER TABLE ONLY name
-    ADD CONSTRAINT name_parent_id_fkey FOREIGN KEY (parent_id) REFERENCES name(id);
+ALTER TABLE ONLY rel
+    ADD CONSTRAINT rel_node_id_fkey FOREIGN KEY (node_id) REFERENCES node(id);
 
 
 --
--- Name: node_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: jamhed
+-- Name: rel_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: jamhed
 --
 
-ALTER TABLE ONLY node
-    ADD CONSTRAINT node_parent_id_fkey FOREIGN KEY (parent_id) REFERENCES node(id);
+ALTER TABLE ONLY rel
+    ADD CONSTRAINT rel_parent_id_fkey FOREIGN KEY (parent_id) REFERENCES node(id);
 
 
 --

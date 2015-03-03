@@ -35,6 +35,7 @@ SET default_with_oids = false;
 
 CREATE TABLE coord (
     node_id integer,
+    stamp timestamp without time zone,
     attitude real,
     longitude real
 );
@@ -129,7 +130,7 @@ ALTER TABLE ONLY node ALTER COLUMN id SET DEFAULT nextval('node_id_seq'::regclas
 -- Data for Name: coord; Type: TABLE DATA; Schema: public; Owner: jamhed
 --
 
-COPY coord (node_id, attitude, longitude) FROM stdin;
+COPY coord (node_id, stamp, attitude, longitude) FROM stdin;
 \.
 
 

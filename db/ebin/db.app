@@ -1,0 +1,12 @@
+{application,db,
+             [{description,"Database Interface"},
+              {vsn,"1"},
+              {registered,[db]},
+              {applications,[kernel,stdlib]},
+              {mod,{db,[]}},
+              {env,[{pools,[{pool1,[{size,5},{max_overflow,10}],
+                                   [{hostname,"127.0.0.1"},
+                                    {database,"aidar"},
+                                    {username,"jamhed"},
+                                    {password,"testtest"}]}]}]},
+              {modules,[db,db_worker]}]}.
